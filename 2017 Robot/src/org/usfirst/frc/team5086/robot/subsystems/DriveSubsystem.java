@@ -15,7 +15,14 @@ public class DriveSubsystem extends Subsystem {
 
     public void initDefaultCommand() {
     }
-    
+
+    public static void stop() {
+    	frontRight.set(0);
+    	frontLeft.set(0);
+    	backLeft.set(0);
+    	backRight.set(0);
+	}
+
     //straight forward and backward
     public static void axialMovement(double speed) {	
     	frontRight.set(-speed*RobotMap.frontRightReduction);

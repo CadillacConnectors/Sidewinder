@@ -1,30 +1,30 @@
 package org.usfirst.frc.team5086.robot;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.util.Date;
 
+import org.usfirst.frc.team5086.robot.autonomous.CommandInterface;
 import org.usfirst.frc.team5086.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team5086.robot.subsystems.OtherSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends IterativeRobot {
-	
-	CameraServer cs;
-	//USBCamera cam;
 
-	public static OI oi;
-	public static double speed = 0;
-	public static int strafe = 0;
-    Command autonomousCommand;
-    SendableChooser chooser;
-    public long start = 0;
+	private static OI oi;
+	private static double speed = 0;
+	private static int strafe = 0;
+    private long start = 0;
+    private CommandInterface commandInterface;
+	private Gyro gyro;
     /*
      * 0 : Do Nothing
      * 1 : Forward for gear
@@ -32,17 +32,11 @@ public class Robot extends IterativeRobot {
      * 3 : Right
      * 4 : Shoot for red mothaf***as
      */
-    public int auto = 4;
+    private int auto = 4;
 
     public void robotInit() {
 		oi = new OI();
-        chooser = new SendableChooser();
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setResolution(600, 450);
-       
-        //cam = new USBCamera();
-        //cam.openCamera();
-        //cam.startCapture();
+		gyro = new AnalogGyro(0);
     }
 	
     public void disabledInit(){
@@ -53,12 +47,9 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-        //autonomousCommand = (Command) chooser.getSelected();
-
-        //if (autonomousCommand != null) autonomousCommand.start();
     	start = new Date().getTime();
-    	
     	assert(start!=0);
+    	commandInterface = new CommandInterface(start);
     }
     
     public void autonomousPeriodic() {
@@ -66,73 +57,32 @@ public class Robot extends IterativeRobot {
     	long time = new Date().getTime();
         switch (auto) {
         case 1:
-        	if (time < 1000 + start) {
-        		DriveSubsystem.axialMovement(-.95);
-        	} else if (time < 3700 + start) {
-        		DriveSubsystem.axialMovement(-.65);
-        	} else {
-        		DriveSubsystem.axialMovement(0);
-        	}
+        	commandInterface.forward(time);
         	break;
         case 2:
-        	if (time < 1000 + start) {
-        		OtherSubsystem.launcherMovement(310);
-        	} else if (time < 11000 + start) {
-        		OtherSubsystem.launcherMovement(310);
-        		OtherSubsystem.ballpedal(-.5);
-        	} else if (time < 12000 + start) {
-        		OtherSubsystem.launcherMovement(0);
-        		OtherSubsystem.ballpedal(0);
-        		DriveSubsystem.lateralMovement(-.5);
-        	} else if (time < 13000 + start) {
-        		DriveSubsystem.axialMovement(.8);
-        	} else if (time < 14500 + start) {
-        		DriveSubsystem.lateralMovement(-.5);
-        	} else {
-        		DriveSubsystem.axialMovement(0);
-        	}
+        	commandInterface.shoot(time, CommandInterface.ALLIANCE_BLUE);
         	break;
         case 3:
-        	if (time < 2000 + start) {
-        		DriveSubsystem.lateralMovement(.5);
-        	} else {
-        		DriveSubsystem.axialMovement(0);
-        	}
-        	//System.out.println(time - start);
+        	commandInterface.right(time);
+        	break;
         case 4:
-        	if (time < 1000 + start) {
-        		OtherSubsystem.launcherMovement(310);
-        	} else if (time < 11000 + start) {
-        		OtherSubsystem.launcherMovement(310);
-        		OtherSubsystem.ballpedal(-.5);
-        	} else if (time < 12000 + start) {
-        		OtherSubsystem.launcherMovement(0);
-        		OtherSubsystem.ballpedal(0);
-        		DriveSubsystem.axialMovement(.8);
-        	} else if (time < 12500 + start) {
-        		DriveSubsystem.lateralMovement(.5);
-        	} else if (time < 14000 + start) {
-        		DriveSubsystem.axialMovement(.8);
-        	} else {
-        		DriveSubsystem.lateralMovement(0);
-        	}
+        	commandInterface.shoot(time, CommandInterface.ALLIANCE_RED);
         	break;
         case 0:
         default:
+			commandInterface.noAction(time);
         	break;
         }
     }
 
     public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-        if (autonomousCommand != null) autonomousCommand.cancel();
+
     }
     
     public void teleopPeriodic() {
     	Scheduler.getInstance().run();
+
+    	System.out.println(gyro.getAngle());
     	
     	//controller 1 inputs
         	double driveaxis1 = Robot.oi.drive.getRawAxis(1); //Left y
