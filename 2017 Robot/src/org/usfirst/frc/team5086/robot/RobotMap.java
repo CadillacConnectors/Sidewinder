@@ -34,4 +34,8 @@ public class RobotMap {
 	public static double climberSpeed = 1;
 	public static double ballpedalSpeed = 1;
 	public static double winchspeed = 1;
+
+	//Acceleration Constants
+	public static double decelerationConstant = .2;
+	public static double accelerationConstant = .1;
 }
