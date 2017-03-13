@@ -1,8 +1,5 @@
 package org.usfirst.frc.team5086.robot;
 
-import org.usfirst.frc.team5086.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.wpilibj.Victor;
-
 public class RobotMap {
 	
 	//motor ports

@@ -1,8 +1,6 @@
 package org.usfirst.frc.team5086.robot;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -10,10 +8,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import java.util.Date;
 
 import org.usfirst.frc.team5086.robot.autonomous.CommandInterface;
-import org.usfirst.frc.team5086.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team5086.robot.subsystems.drive.DriveSubsystem;
 import org.usfirst.frc.team5086.robot.subsystems.OtherSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import org.usfirst.frc.team5086.robot.subsystems.acceleration.LateralAcceleration;
 
 public class Robot extends IterativeRobot {
 

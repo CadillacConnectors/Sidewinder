@@ -1,7 +1,6 @@
-package org.usfirst.frc.team5086.robot.subsystems.acceleration;
+package org.usfirst.frc.team5086.robot.subsystems.drive.acceleration;
 
-import org.usfirst.frc.team5086.robot.Robot;
-import org.usfirst.frc.team5086.robot.RobotMap;
+import org.usfirst.frc.team5086.robot.subsystems.drive.objects.WheelConfiguration;
 
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -20,8 +19,9 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
     private double lateral = 0;
     private Queue<Double> angles = new ArrayBlockingQueue<Double>(20);
     private Queue<Boolean> correcting = new ArrayBlockingQueue<Boolean>(20);
-    private int[] correctionReduction = new int[4];
+    private WheelConfiguration correctionReduction = new WheelConfiguration(1);
 
+    @Override
     public boolean decelerate(double min) {
         double lateral = this.lateral;
         this.lateral = decelerate(min, lateral);
@@ -30,25 +30,36 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
 
     @Override
     public boolean accelerate(double max) {
-        if (Math.abs(lateral) < Math.abs(max)) {
-
-        }
-        return true;
+        double lateral = this.lateral;
+        this.lateral = accelerate(max, lateral);
+        return (this.lateral == lateral);
     }
 
     @Override
-    public int[] getTalonConfiguration(int max) {
-        return new int[0];
+    public WheelConfiguration getTalonConfiguration(int max) {
+        WheelConfiguration values = getVictorConfiguration();
+        values.merge(new WheelConfiguration(max));
+        return values;
     }
 
     @Override
-    public int[] getVictorConfiguration() {
-        return new int[0];
+    public WheelConfiguration getVictorConfiguration() {
+        WheelConfiguration values = new WheelConfiguration();
+
+        values.setBackLeft(-lateral);
+        values.setBackRight(-lateral);
+        values.setFrontLeft(lateral);
+        values.setFrontRight(lateral);
+
+        values.merge(correctionReduction);
+
+        return values;
     }
 
     @Override
     public void addAngle(double angle) {
-
+        if (angles.size() == 20) angles.remove();
+        angles.add(angle);
     }
 
     @Override
@@ -60,6 +71,7 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
     public void clear() {
         angles.clear();
         correcting.clear();
+        correctionReduction.reset(1);
     }
 
     @Override

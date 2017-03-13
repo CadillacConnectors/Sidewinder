@@ -1,8 +1,5 @@
-package org.usfirst.frc.team5086.robot.subsystems.acceleration;
+package org.usfirst.frc.team5086.robot.subsystems.drive.acceleration;
 
-import java.util.Collection;
-import java.util.DoubleSummaryStatistics;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 

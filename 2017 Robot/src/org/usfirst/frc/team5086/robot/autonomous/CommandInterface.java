@@ -1,6 +1,6 @@
 package org.usfirst.frc.team5086.robot.autonomous;
 
-import org.usfirst.frc.team5086.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team5086.robot.subsystems.drive.DriveSubsystem;
 import org.usfirst.frc.team5086.robot.subsystems.OtherSubsystem;
 
 /**
