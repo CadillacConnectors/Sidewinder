@@ -6,17 +6,10 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * Acceleration-based Chassis control system for lateral (Left / Right) movements
- *
- * Also uses a gyrometer to control orientation
- *
- * Created: 3/11/2017
- *
- * @author Joshua Jacobson (joshuthomasjacobson@gmail.com)
- * @version 1.0
+ * Created by Josh on 3/25/2017.
  */
-public class LateralAcceleration extends Accelerator implements AccelerationMode, GyroDriver {
-    private double lateral = 0;
+public class AxialAcceleration extends Accelerator implements GyroDriver, AccelerationMode {
+    private double axial = 0;
     private Queue<Double> angles = new ArrayBlockingQueue<Double>(20);
     private Queue<Boolean> correcting = new ArrayBlockingQueue<Boolean>(20);
     private WheelConfiguration correctionReduction = new WheelConfiguration(1);
@@ -24,16 +17,16 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
 
     @Override
     public boolean decelerate(double min) {
-        double lateral = this.lateral;
-        this.lateral = decelerate(min, lateral);
-        return (this.lateral == lateral);
+        double axial = this.axial;
+        this.axial = decelerate(min, axial);
+        return (this.axial == axial);
     }
 
     @Override
     public boolean accelerate(double max) {
-        double lateral = this.lateral;
-        this.lateral = accelerate(max, lateral);
-        return (this.lateral == lateral);
+        double axial = this.axial;
+        this.axial = accelerate(max, axial);
+        return (this.axial == axial);
     }
 
     @Override
@@ -47,10 +40,10 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
     public WheelConfiguration getVictorConfiguration() {
         WheelConfiguration values = new WheelConfiguration();
 
-        values.setBackLeft(-lateral);
-        values.setBackRight(-lateral);
-        values.setFrontLeft(lateral);
-        values.setFrontRight(lateral);
+        values.setBackLeft(axial);
+        values.setBackRight(-axial);
+        values.setFrontLeft(axial);
+        values.setFrontRight(-axial);
 
         values.merge(correctionReduction);
 
@@ -77,19 +70,19 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
             //To far right
             if (correctionReduction.getFrontRight() <= (1 - angle)) {
                 correctionReduction.setFrontRight(correctionReduction.getFrontRight() + angle);
-                correctionReduction.setBackRight(correctionReduction.getBackRight() + angle);
+                correctionReduction.setFrontLeft(correctionReduction.getFrontLeft() + angle);
             } else {
                 correctionReduction.setBackLeft(correctionReduction.getBackLeft() - angle);
-                correctionReduction.setFrontLeft(correctionReduction.getFrontLeft() - angle);
+                correctionReduction.setBackRight(correctionReduction.getBackRight() - angle);
             }
         } else {
             //To far left
-            if (correctionReduction.getFrontLeft() <= (1 - angle)) {
+            if (correctionReduction.getBackRight() <= (1 - angle)) {
                 correctionReduction.setBackLeft(correctionReduction.getBackLeft() + angle);
-                correctionReduction.setFrontLeft(correctionReduction.getFrontLeft() + angle);
+                correctionReduction.setBackRight(correctionReduction.getBackRight() + angle);
             } else {
                 correctionReduction.setFrontRight(correctionReduction.getFrontRight() - angle);
-                correctionReduction.setBackRight(correctionReduction.getBackRight() - angle);
+                correctionReduction.setFrontLeft(correctionReduction.getFrontLeft() - angle);
             }
         }
     }
@@ -105,5 +98,4 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
     public void setAngle(double angle) {
         this.angle = angle;
     }
-
 }

@@ -23,8 +23,10 @@ abstract class Accelerator {
         if (Math.abs(current) < Math.abs(max)) {
             if (current > 0) {
                 current += RobotMap.accelerationConstant;
+                if (current > max) current = max;
             } else {
                 current -= RobotMap.accelerationConstant;
+                if (current < max) current = max;
             }
         }
         return current;

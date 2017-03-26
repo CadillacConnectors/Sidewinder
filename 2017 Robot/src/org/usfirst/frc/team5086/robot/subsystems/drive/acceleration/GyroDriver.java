@@ -12,5 +12,4 @@ public interface GyroDriver {
     void addAngle(double angle);
     void clear();
     void setAngle(double angle);
-    void calibrateDrive();
 }
