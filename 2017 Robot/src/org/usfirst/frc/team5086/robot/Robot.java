@@ -17,6 +17,7 @@ public class Robot extends IterativeRobot {
     private long start = 0;
     private CommandInterface commandInterface;
 	private Gyro gyro;
+	private double gyroReduction = 0;
     /*
      * 0 : Do Nothing
      * 1 : Forward for gear
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		gyroReduction += RobotMap.gyroCorrection;
 	}
 
     public void autonomousInit() {
@@ -43,9 +45,11 @@ public class Robot extends IterativeRobot {
     	assert(start!=0);
     	commandInterface = new CommandInterface(start);
     	gyro.calibrate();
+		gyroReduction = 0;
     }
     
     public void autonomousPeriodic() {
+		gyroReduction += RobotMap.gyroCorrection;
         Scheduler.getInstance().run();
     	long time = new Date().getTime();
         switch (auto) {
@@ -75,7 +79,9 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	Scheduler.getInstance().run();
 
-    	double angle = gyro.getAngle();
+		gyroReduction += RobotMap.gyroCorrection;
+
+    	double angle = gyro.getAngle() - gyroReduction;
     	
     	//controller 1 inputs
         	double driveaxis1 = Robot.oi.drive.getRawAxis(1); //Left y
@@ -125,16 +131,16 @@ public class Robot extends IterativeRobot {
         if (drivepov != -1) {
         	switch (drivepov) {
     	 		case 0:
-    	 			DriveSubsystem.axialMovement(RobotMap.forwardSpeed);
+    	 			DriveSubsystem.axialMovement(RobotMap.forwardSpeed, angle);
     	 			break;
     	 		case 90:
-					DriveSubsystem.lateralMovement(RobotMap.rightSpeed);
+					DriveSubsystem.lateralMovement(RobotMap.rightSpeed, angle);
     	 			break;
     	 		case 180:
-    	 			DriveSubsystem.axialMovement(-RobotMap.forwardSpeed);
+    	 			DriveSubsystem.axialMovement(-RobotMap.forwardSpeed, angle);
     	 			break;
     	 		case 270:
-					DriveSubsystem.lateralMovement(-RobotMap.rightSpeed);
+					DriveSubsystem.lateralMovement(-RobotMap.rightSpeed, angle);
     	 			break;
     	 		default:
     	 			break;
@@ -142,11 +148,11 @@ public class Robot extends IterativeRobot {
         	
         	//joystick driving	
         } else if (Math.abs(driveaxis1) > RobotMap.threshold && (Math.abs(driveaxis3) < RobotMap.threshold)){
-        	DriveSubsystem.axialMovement(-driveaxis1);
+        	DriveSubsystem.axialMovement(-driveaxis1, angle);
         } else if (Math.abs(driveaxis1) < RobotMap.threshold && (Math.abs(driveaxis3) > RobotMap.threshold)){
         	DriveSubsystem.turnMovement(-driveaxis3);
         } else if (Math.abs(driveaxis1) > RobotMap.threshold && (Math.abs(driveaxis3) > RobotMap.threshold)){
-        	DriveSubsystem.axialMovement(-driveaxis1);
+        	DriveSubsystem.axialMovement(-driveaxis1, angle);
         } else {
     	 	DriveSubsystem.stop();
      	}

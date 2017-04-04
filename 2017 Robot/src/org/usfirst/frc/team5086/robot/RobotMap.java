@@ -1,6 +1,8 @@
 package org.usfirst.frc.team5086.robot;
 
 public class RobotMap {
+
+	public static double gyroCorrection = .05;
 	
 	//motor ports
 	public static int sweeper = 0;

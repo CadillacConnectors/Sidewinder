@@ -38,7 +38,29 @@ public final class AccelerationController {
         backRight.set(wheelConfiguration.getBackRight());
     }
 
+    public static void sendAngle(double angle) {
+        switch (mode) {
+            case MODE_AXIAL:
+                axialAcceleration.addAngle(angle);
+                break;
+            case MODE_LATERAL:
+                lateralAcceleration.accelerate(angle);
+                break;
+            default:
+                break;
+        }
+    }
+
     public static boolean stopMode() {
+        boolean stop = stop();
+        if (stop) {
+            axialAcceleration.clear();
+            lateralAcceleration.clear();
+        }
+        return stop;
+    }
+
+    private static boolean stop() {
         switch (mode) {
             case MODE_AXIAL:
                 return axialAcceleration.decelerate(0);

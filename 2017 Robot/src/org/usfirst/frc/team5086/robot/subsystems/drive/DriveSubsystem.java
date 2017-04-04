@@ -26,12 +26,14 @@ public class DriveSubsystem extends Subsystem {
 	}
 
     //straight forward and backward
-    public static void axialMovement(double speed) {	
+    public static void axialMovement(double speed, double angle) {
     	if (AccelerationController.mode == AccelerationController.MODE_AXIAL) {
 			AccelerationController.axialAcceleration.accelerate(speed);
+			AccelerationController.sendAngle(angle);
 			AccelerationController.setTalonPercents(AccelerationController.axialAcceleration.getVictorConfiguration());
 		} else if (AccelerationController.stopMode()) {
 			AccelerationController.mode = AccelerationController.MODE_AXIAL;
+			AccelerationController.axialAcceleration.setAngle(angle);
 		}
 	}
     
@@ -46,12 +48,14 @@ public class DriveSubsystem extends Subsystem {
 	}
     
     //strafing left and right
-    public static void  lateralMovement(double speed) {
+    public static void  lateralMovement(double speed, double angle) {
     	if (AccelerationController.mode == AccelerationController.MODE_LATERAL) {
 			AccelerationController.lateralAcceleration.accelerate(speed);
+			AccelerationController.sendAngle(angle);
 			AccelerationController.setTalonPercents(AccelerationController.lateralAcceleration.getVictorConfiguration());
 		} else if (AccelerationController.stopMode()) {
-			AccelerationController.mode = AccelerationController.MODE_ROTATIONAL;
+			AccelerationController.mode = AccelerationController.MODE_LATERAL;
+			AccelerationController.lateralAcceleration.setAngle(angle);
 		}
     }
 
