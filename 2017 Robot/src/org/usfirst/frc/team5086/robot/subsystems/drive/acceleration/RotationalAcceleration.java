@@ -36,10 +36,10 @@ public class RotationalAcceleration extends Accelerator implements AccelerationM
     public WheelConfiguration getVictorConfiguration() {
         WheelConfiguration values = new WheelConfiguration();
 
-        values.setBackLeft(rotational);
-        values.setBackRight(rotational);
-        values.setFrontLeft(rotational);
-        values.setFrontRight(rotational);
+        values.setBackLeft(-rotational);
+        values.setBackRight(-rotational);
+        values.setFrontLeft(-rotational);
+        values.setFrontRight(-rotational);
 
         return values;
     }

@@ -4,49 +4,58 @@ import org.usfirst.frc.team5086.robot.RobotMap;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc.team5086.robot.subsystems.drive.acceleration.AccelerationController;
+import org.usfirst.frc.team5086.robot.subsystems.drive.objects.WheelConfiguration;
 
 public class DriveSubsystem extends Subsystem {
 	
 	//creating motor controllers
-	static Victor frontRight = new Victor(RobotMap.frontRight);
-	static Victor backRight = new Victor(RobotMap.backRight);
-	static Victor frontLeft = new Victor(RobotMap.frontLeft);
-	static Victor backLeft = new Victor(RobotMap.backLeft);
+	//static Victor frontRight = new Victor(RobotMap.frontRight);
+	//static Victor backRight = new Victor(RobotMap.backRight);
+	//static Victor frontLeft = new Victor(RobotMap.frontLeft);
+	//static Victor backLeft = new Victor(RobotMap.backLeft);
 
     public void initDefaultCommand() {
     }
 
     public static void stop() {
-    	frontRight.set(0);
-    	frontLeft.set(0);
-    	backLeft.set(0);
-    	backRight.set(0);
+    	if (AccelerationController.stopMode()) {
+			AccelerationController.mode = AccelerationController.MODE_NONE;
+			AccelerationController.setTalonPercents(new WheelConfiguration(0));
+		}
 	}
 
     //straight forward and backward
     public static void axialMovement(double speed) {	
-    	frontRight.set(-speed*RobotMap.frontRightReduction);
-    	backRight.set(-speed*RobotMap.backRightReduction);
-    	frontLeft.set(speed*RobotMap.frontLeftReduction);
-    	backLeft.set(speed*RobotMap.backLeftReduction);
-    }
+    	if (AccelerationController.mode == AccelerationController.MODE_AXIAL) {
+			AccelerationController.axialAcceleration.accelerate(speed);
+			AccelerationController.setTalonPercents(AccelerationController.axialAcceleration.getVictorConfiguration());
+		} else if (AccelerationController.stopMode()) {
+			AccelerationController.mode = AccelerationController.MODE_AXIAL;
+		}
+	}
     
     //zero degree turning
     public static void  turnMovement(double speed) {
-    	backRight.set(-speed*RobotMap.backRightReduction);
-    	frontRight.set(-speed*RobotMap.frontRightReduction);
-    	backLeft.set(-speed*RobotMap.backLeftReduction);
-   		frontLeft.set(-speed*RobotMap.frontLeftReduction);
-    }
+    	if (AccelerationController.mode == AccelerationController.MODE_ROTATIONAL) {
+			AccelerationController.rotationalAcceleration.accelerate(speed);
+			AccelerationController.setTalonPercents(AccelerationController.rotationalAcceleration.getVictorConfiguration());
+		} else if (AccelerationController.stopMode()) {
+			AccelerationController.mode = AccelerationController.MODE_ROTATIONAL;
+		}
+	}
     
     //strafing left and right
     public static void  lateralMovement(double speed) {
-    	backRight.set(-speed*RobotMap.backRightReduction);
-		frontRight.set(speed*RobotMap.frontRightReduction);
-		backLeft.set(-speed*RobotMap.backLeftReduction);
-		frontLeft.set(speed*RobotMap.frontLeftReduction);
+    	if (AccelerationController.mode == AccelerationController.MODE_LATERAL) {
+			AccelerationController.lateralAcceleration.accelerate(speed);
+			AccelerationController.setTalonPercents(AccelerationController.lateralAcceleration.getVictorConfiguration());
+		} else if (AccelerationController.stopMode()) {
+			AccelerationController.mode = AccelerationController.MODE_ROTATIONAL;
+		}
     }
-    
+
+	/*
     //turning while moving
     public static void  axialturnMovement(double x,double y){
     	if (y>0) {//backwards
@@ -74,5 +83,5 @@ public class DriveSubsystem extends Subsystem {
     			frontLeft.set(x*y*RobotMap.frontLeftReduction);
     		}
     	}
-    }
+    }*/
 }

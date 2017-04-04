@@ -17,10 +17,10 @@ public class RobotMap {
 	public static int joystickOther = 1;
 	
 	//compensating for motor controller variance
-	public static double frontRightReduction = .90;
-	public static double backRightReduction = .88;
-	public static double frontLeftReduction = .94;
-	public static double backLeftReduction = .96;
+	//public static double frontRightReduction = .90;
+	//public static double backRightReduction = .88;
+	//public static double frontLeftReduction = .94;
+	//public static double backLeftReduction = .96;
 	
 	//max speed variables
 	public static double threshold = .3;

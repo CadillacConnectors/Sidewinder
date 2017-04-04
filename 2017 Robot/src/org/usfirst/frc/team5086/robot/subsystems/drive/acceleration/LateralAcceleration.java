@@ -98,7 +98,6 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
     public void clear() {
         angles.clear();
         correcting.clear();
-        correctionReduction.reset(1);
     }
 
     @Override

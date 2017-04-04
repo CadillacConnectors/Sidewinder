@@ -146,7 +146,7 @@ public class Robot extends IterativeRobot {
         } else if (Math.abs(driveaxis1) < RobotMap.threshold && (Math.abs(driveaxis3) > RobotMap.threshold)){
         	DriveSubsystem.turnMovement(-driveaxis3);
         } else if (Math.abs(driveaxis1) > RobotMap.threshold && (Math.abs(driveaxis3) > RobotMap.threshold)){
-        	DriveSubsystem.axialturnMovement(driveaxis3,driveaxis1);
+        	DriveSubsystem.axialMovement(-driveaxis1);
         } else {
     	 	DriveSubsystem.stop();
      	}
