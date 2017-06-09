@@ -4,7 +4,7 @@ import org.usfirst.frc.team5086.robot.subsystems.drive.DriveSubsystem;
 import org.usfirst.frc.team5086.robot.subsystems.OtherSubsystem;
 
 /**
- * Created by joshua on 3/9/17.
+ * Created by Tucker on 6/21/02.
  */
 public class CommandInterface {
 
@@ -21,12 +21,12 @@ public class CommandInterface {
     }
 
     public void forward(long time) {
-        if (time < 1000 + start) {
-            DriveSubsystem.axialMovement(-.95);
-        } else if (time < 3700 + start) {
-            DriveSubsystem.axialMovement(-.65);
+        if (time < 500 + start) {
+            DriveSubsystem.axialMovement(.95, 0);
+        } else if (time < 2600 + start) {
+            DriveSubsystem.axialMovement(.55, 0);
         } else {
-            DriveSubsystem.axialMovement(0);
+            DriveSubsystem.stop();
         }
     }
 
@@ -35,42 +35,46 @@ public class CommandInterface {
         if (alliance == ALLIANCE_BLUE) {
             if (time < 1000 + start) {
                 OtherSubsystem.launcherMovement(310);
-            } else if (time < 11000 + start) {
+            } else if (time < 10500 + start) {
                 OtherSubsystem.launcherMovement(310);
                 OtherSubsystem.ballpedal(-.5);
-            } else if (time < 12000 + start) {
+            } else if (time < 11500 + start) {
                 OtherSubsystem.launcherMovement(0);
                 OtherSubsystem.ballpedal(0);
-                DriveSubsystem.lateralMovement(-.5);
-            } else if (time < 13000 + start) {
-                DriveSubsystem.axialMovement(.8);
-            } else if (time < 14500 + start) {
-                DriveSubsystem.lateralMovement(-.5);
+                DriveSubsystem.axialMovement(-.8, 0);
+            } else if (time < 12500 + start) {
+                DriveSubsystem.lateralMovement(-.5, 0);
+            } else if (time < 14000 + start) {
+                DriveSubsystem.axialMovement(-.8, 0);
+            } else if (time < 14800 + start) {
+            	DriveSubsystem.turnMovement(.75);
             } else {
-                DriveSubsystem.axialMovement(0);
+                DriveSubsystem.stop();
             }
         } else if (alliance == ALLIANCE_RED) {
             if (time < 1000 + start) {
                 OtherSubsystem.launcherMovement(310);
-            } else if (time < 11000 + start) {
+            } else if (time < 10500 + start) {
                 OtherSubsystem.launcherMovement(310);
                 OtherSubsystem.ballpedal(-.5);
-            } else if (time < 12000 + start) {
+            } else if (time < 11500 + start) {
                 OtherSubsystem.launcherMovement(0);
                 OtherSubsystem.ballpedal(0);
-                DriveSubsystem.axialMovement(.8);
+                DriveSubsystem.axialMovement(-.8, 0);
             } else if (time < 12500 + start) {
-                DriveSubsystem.lateralMovement(.5);
+                DriveSubsystem.lateralMovement(.5, 0);
             } else if (time < 14000 + start) {
-                DriveSubsystem.axialMovement(.8);
+                DriveSubsystem.axialMovement(-.8, 0);
+            } else if (time < 14800 + start) {
+            	DriveSubsystem.turnMovement(.75);
             } else {
-                DriveSubsystem.lateralMovement(0);
+                DriveSubsystem.stop();
             }        }
     }
 
     public void right(long time) {
         if (time < 2000 + start) {
-            DriveSubsystem.lateralMovement(.5);
+            DriveSubsystem.lateralMovement(-.5);
         } else {
             DriveSubsystem.axialMovement(0);
         }

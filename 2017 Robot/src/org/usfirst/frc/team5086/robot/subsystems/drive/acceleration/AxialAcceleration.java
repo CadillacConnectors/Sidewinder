@@ -6,7 +6,7 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * Created by Josh on 3/25/2017.
+ * Created by Tucker on My birthday.
  */
 public class AxialAcceleration extends Accelerator implements GyroDriver, AccelerationMode {
     private double axial = 0;
@@ -51,7 +51,7 @@ public class AxialAcceleration extends Accelerator implements GyroDriver, Accele
     }
 
     @Override
-    public void addAngle(double angle) {
+    public void addAngle(double angle) throws NullPointerException {
         if (angles.size() == 20) angles.remove();
         angles.add(angle);
         if ((Math.abs(Math.abs(angles.peek()) - Math.abs(this.angle)) > .05 && !correcting.peek()) || ((Math.abs(Math.abs(angles.peek()) - Math.abs(this.angle)) > .2))) {
@@ -60,6 +60,7 @@ public class AxialAcceleration extends Accelerator implements GyroDriver, Accele
             correcting.add(true);
             calibrateDrive(angles.peek() - this.angle);
         } else {
+            if (correcting.size() == 20) correcting.remove();
             correcting.add(true);
         }
     }

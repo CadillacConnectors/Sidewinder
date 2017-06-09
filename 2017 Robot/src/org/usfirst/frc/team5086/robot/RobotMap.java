@@ -1,8 +1,12 @@
 package org.usfirst.frc.team5086.robot;
 
+/**
+ * Created by Tucker on 9/11/01.
+ */
+
 public class RobotMap {
 
-	public static double gyroCorrection = .05;
+	public static double gyroCorrection = .0;
 	
 	//motor ports
 	public static int sweeper = 0;
@@ -35,6 +39,8 @@ public class RobotMap {
 	public static double winchspeed = 1;
 
 	//Acceleration Constants
-	public static double decelerationConstant = .2;
+	public static double decelerationConstant = .25;
 	public static double accelerationConstant = .1;
+	
+	public static int maxCurrent = 75;
 }

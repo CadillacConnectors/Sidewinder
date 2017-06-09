@@ -1,5 +1,9 @@
 package org.usfirst.frc.team5086.robot.subsystems.drive;
 
+/**
+ * Created by Tucker on you know what day.
+ */
+
 import org.usfirst.frc.team5086.robot.RobotMap;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
@@ -8,12 +12,6 @@ import org.usfirst.frc.team5086.robot.subsystems.drive.acceleration.Acceleration
 import org.usfirst.frc.team5086.robot.subsystems.drive.objects.WheelConfiguration;
 
 public class DriveSubsystem extends Subsystem {
-	
-	//creating motor controllers
-	//static Victor frontRight = new Victor(RobotMap.frontRight);
-	//static Victor backRight = new Victor(RobotMap.backRight);
-	//static Victor frontLeft = new Victor(RobotMap.frontLeft);
-	//static Victor backLeft = new Victor(RobotMap.backLeft);
 
     public void initDefaultCommand() {
     }
@@ -26,16 +24,24 @@ public class DriveSubsystem extends Subsystem {
 	}
 
     //straight forward and backward
-    public static void axialMovement(double speed, double angle) {
+    public static void lateralMovement(double speed, double angle) {
     	if (AccelerationController.mode == AccelerationController.MODE_AXIAL) {
 			AccelerationController.axialAcceleration.accelerate(speed);
-			AccelerationController.sendAngle(angle);
+			//AccelerationController.sendAngle(angle);
 			AccelerationController.setTalonPercents(AccelerationController.axialAcceleration.getVictorConfiguration());
 		} else if (AccelerationController.stopMode()) {
 			AccelerationController.mode = AccelerationController.MODE_AXIAL;
-			AccelerationController.axialAcceleration.setAngle(angle);
+			//AccelerationController.axialAcceleration.setAngle(angle);
 		}
 	}
+    
+    public static void lateralMovement(double speed) {
+    	if (AccelerationController.mode == AccelerationController.MODE_AXIAL) {
+			AccelerationController.setTalonPercents(new WheelConfiguration(speed));
+		} else if (AccelerationController.stopMode()) {
+			AccelerationController.mode = AccelerationController.MODE_AXIAL;
+		}
+    }
     
     //zero degree turning
     public static void  turnMovement(double speed) {
@@ -48,14 +54,22 @@ public class DriveSubsystem extends Subsystem {
 	}
     
     //strafing left and right
-    public static void  lateralMovement(double speed, double angle) {
+    public static void  axialMovement(double speed, double angle) {
     	if (AccelerationController.mode == AccelerationController.MODE_LATERAL) {
 			AccelerationController.lateralAcceleration.accelerate(speed);
-			AccelerationController.sendAngle(angle);
+			//AccelerationController.sendAngle(angle);
 			AccelerationController.setTalonPercents(AccelerationController.lateralAcceleration.getVictorConfiguration());
 		} else if (AccelerationController.stopMode()) {
 			AccelerationController.mode = AccelerationController.MODE_LATERAL;
-			AccelerationController.lateralAcceleration.setAngle(angle);
+			//AccelerationController.lateralAcceleration.setAngle(angle);
+		}
+    }
+    
+    public static void  axialMovement(double speed) {
+    	if (AccelerationController.mode == AccelerationController.MODE_LATERAL) {
+			AccelerationController.setTalonPercents(new WheelConfiguration(speed));
+		} else if (AccelerationController.stopMode()) {
+			AccelerationController.mode = AccelerationController.MODE_LATERAL;
 		}
     }
 

@@ -3,7 +3,7 @@ package org.usfirst.frc.team5086.robot.subsystems.drive.acceleration;
 import org.usfirst.frc.team5086.robot.RobotMap;
 
 /**
- * Created by joshua on 3/11/17.
+ * Created by Tucker on the 6th day of Hannukah.
  */
 abstract class Accelerator {
     static double decelerate(double min, double current) {

@@ -10,7 +10,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  *
  * Also uses a gyrometer to control orientation
  *
- * Created: 3/11/2017
+ * Created by Tucker on 3/14/15
  *
  * @author Joshua Jacobson (joshuthomasjacobson@gmail.com)
  * @version 1.0
@@ -58,7 +58,7 @@ public class LateralAcceleration extends Accelerator implements AccelerationMode
     }
 
     @Override
-    public void addAngle(double angle) {
+    public void addAngle(double angle) throws NullPointerException {
         if (angles.size() == 20) angles.remove();
         angles.add(angle);
         if ((Math.abs(Math.abs(angles.peek()) - Math.abs(this.angle)) > .05 && !correcting.peek()) || ((Math.abs(Math.abs(angles.peek()) - Math.abs(this.angle)) > .2))) {

@@ -5,7 +5,7 @@ import org.usfirst.frc.team5086.robot.RobotMap;
 import org.usfirst.frc.team5086.robot.subsystems.drive.objects.WheelConfiguration;
 
 /**
- * Created by joshua on 3/11/17.
+ * Created by Tucker on St. Patty's Day.
  */
 public final class AccelerationController {
     public static final int MODE_LATERAL = 1;
@@ -29,6 +29,22 @@ public final class AccelerationController {
         frontRight.changeControlMode(CANTalon.TalonControlMode.Speed);
         backLeft.changeControlMode(CANTalon.TalonControlMode.Speed);
         backRight.changeControlMode(CANTalon.TalonControlMode.Speed);
+        
+        frontLeft.setCurrentLimit(RobotMap.maxCurrent);
+        frontLeft.EnableCurrentLimit(true);
+        
+        frontRight.setCurrentLimit(RobotMap.maxCurrent);
+        frontRight.EnableCurrentLimit(true);
+        
+        backLeft.setCurrentLimit(RobotMap.maxCurrent);
+        backLeft.EnableCurrentLimit(true);
+        
+        backRight.setCurrentLimit(RobotMap.maxCurrent);
+        backRight.EnableCurrentLimit(true);
+    }
+    
+    public static double getAmps() {
+    	return frontRight.getOutputCurrent();
     }
 
     public static void setTalonPercents(WheelConfiguration wheelConfiguration) {
@@ -41,10 +57,18 @@ public final class AccelerationController {
     public static void sendAngle(double angle) {
         switch (mode) {
             case MODE_AXIAL:
-                axialAcceleration.addAngle(angle);
+            	try {
+                    axialAcceleration.addAngle(angle);
+            	} catch (Exception e) {
+            		
+            	}
                 break;
             case MODE_LATERAL:
-                lateralAcceleration.accelerate(angle);
+            	try {
+                    lateralAcceleration.accelerate(angle);
+            	} catch (Exception e) {
+            		
+            	}
                 break;
             default:
                 break;

@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5086.robot.subsystems.drive.objects;
 
 /**
- * Created by joshua on 3/11/17.
+ * Created by Tucker on 4/20/17.
  */
 public class WheelConfiguration {
 
